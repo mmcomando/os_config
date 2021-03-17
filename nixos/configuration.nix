@@ -4,11 +4,24 @@
 
 { config, pkgs, ... }:
 
+let
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -23,7 +36,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Warsaw";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -53,7 +66,8 @@
   
 
   # Configure keymap in X11
-  #services.xserver.layout = "pl";
+  services.xserver.layout = "pl";
+  services.xserver.xkbVariant = "colemak";
   #services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
@@ -80,10 +94,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim
+    wget
+    vim
     firefox
     vscode
     git
+    xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
+    unstable.wally-cli # To install moonlander keyboard firmwareczy 
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -1,0 +1,11 @@
+ssh-keygen -t ed25519 -C "mmcomando@gmail.com"
+
+ssh-add ~/.ssh/id_ed25519
+
+
+>In ~/.ssh/config, add:
+Host github.com
+ HostName github.com
+ IdentityFile ~/.ssh/id_rsa_github
+
+If the config file is new, you might need to do chmod 600 ~/.ssh/config

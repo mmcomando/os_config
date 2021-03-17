@@ -9,10 +9,10 @@
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 # Home row direction keys, like vim
-set $left h
-set $down j
-set $up k
-set $right l
+set $left n
+set $down e
+set $up i
+set $right o
 # Your preferred terminal emulator
 set $term alacritty
 # Your preferred application launcher
@@ -89,7 +89,7 @@ input * {
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+Shift+y exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
@@ -153,7 +153,7 @@ input * {
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
     bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+    bindsym $mod+p layout toggle split
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
@@ -220,3 +220,24 @@ bar {
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
 }
+
+
+#set $my_wallpaper_fhd  ~/os_config/wallpaper/34440x1440/eclipse.jpg
+#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/engine.jpg
+#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/mountains.jpg
+#set $my_wallpaper_fhd  ~/os_config/wallpaper/34440x1440/nebula.jpg
+#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/tunel.png
+#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/warsaw.png
+set $my_wallpaper_fhd  ~/os_config/wallpaper/1920x1200/crysis.jpg
+set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/endgame.png
+
+output DP-1 pos 0 0
+output DVI-D-2  pos 3440 0
+workspace 1 output DVI-D-2
+workspace 2 output DP-1
+
+output DP-1 background $my_wallpaper_uw fit
+output DVI-D-2 background $my_wallpaper_fhd center
+
+
+exec swaymsg 'workspace 1; exec firefox'
