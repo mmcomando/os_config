@@ -57,9 +57,20 @@ in
 
   # Enable the X11 windowing system.
   #Fservices.xserver.enable = true;
-  
-  programs.sway.enable = true; 
-
+  # programs.sway.enable = true; 
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true; # so that gtk works properly
+    # extraPackages = with pkgs; [
+    #   swaylock
+    #   swayidle
+    #   wl-clipboard
+    #   mako # notification daemon
+    #   alacritty # Alacritty is the default terminal in the config
+    #   dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+    # ];
+  };
+  # gtk.iconCache.enable = true;
   # Enable the GNOME 3 Desktop Environment.
   #services.xserver.displayManager.gdm.enable = true;
   #services.xserver.desktopManager.gnome3.enable = true;
@@ -91,16 +102,22 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.enableDebugInfo = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget
-    vim
     firefox
-    vscode
+    gdb
     git
+    libreoffice
+    tango-icon-theme # For icons in thunar
+    unstable.wally-cli # To install moonlander keyboard firmware
+    vim
+    vscode
+    wget
     xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
-    unstable.wally-cli # To install moonlander keyboard firmwareczy 
+    hicolor-icon-theme
+    nwg-launchers
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
