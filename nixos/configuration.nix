@@ -55,12 +55,13 @@ in
   
   
   # Enable CUPS to print documents.
-  # Doesn't work now :/
   services.printing.enable = true;
+  # Add printer by web interface: http://localhost:631/printers
   services.printing.drivers = [ 
-    # pkgs.mm_brlaser # For brother printers
+    pkgs.brlaser # For brother printers
+    # pkgs.mm_brlaser # For brother printers git version
     # pkgs.brgenml1lpr # For brother printers
-    pkgs.mm_printer_hll2350dw
+    # pkgs.mm_printer_hll2350dw
   ];
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
