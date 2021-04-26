@@ -57,11 +57,8 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
   # Add printer by web interface: http://localhost:631/printers
-  services.printing.drivers = [ 
+  services.printing.drivers = [
     pkgs.brlaser # For brother printers
-    # pkgs.mm_brlaser # For brother printers git version
-    # pkgs.brgenml1lpr # For brother printers
-    # pkgs.mm_printer_hll2350dw
   ];
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -135,8 +132,11 @@ in
   environment.systemPackages = with pkgs; [
     # Basic programs
     chromium # Sometimes has something with Firefox doesn't have
+    fd # Better find
     firefox # Main browser
     font-awesome # For icons in i3status-rust
+    glib # For trash support
+    gnome3.gnome-system-monitor # Task manager
     hicolor-icon-theme # Icons, for thunar?
     libreoffice # Documents editing
     mesa-demos # glxinfo
@@ -162,6 +162,13 @@ in
     hotspot
     linuxPackages.perf
     perf-tools
+  ];
+
+  # Thunar extensions
+  services.gvfs.enable = true;
+  services.xserver.desktopManager.xfce.thunarPlugins = [
+    pkgs.xfce.thunar-archive-plugin
+    pkgs.xfce.thunar-volman
   ];
 
   # Available fonts
