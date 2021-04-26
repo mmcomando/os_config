@@ -43,7 +43,7 @@ in
   time.timeZone = "Europe/Warsaw";
 
   # Linux kernel options
-  # boot.kernelPackages = pkgs.linuxPackages_5_10;
+  boot.kernelPackages = pkgs.linuxPackages_5_10; # On default kernel my 3440x1440 monitor doesn't work
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = -1; # For perf
   };
