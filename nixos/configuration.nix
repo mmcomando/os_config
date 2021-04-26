@@ -129,6 +129,7 @@ in
   environment.enableDebugInfo = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  # $ sudo nix-collect-garbage -d  # Remove unused packages and old sys configurations
   environment.systemPackages = with pkgs; [
     # Basic programs
     chromium # Sometimes has something with Firefox doesn't have
