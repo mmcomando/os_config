@@ -1,0 +1,55 @@
+theme = "solarized-dark"
+icons = "awesome5"
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GB"
+interval = 20
+warning = 200.0
+alert = 10.0
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{Mup}%"
+format_swap = "{SUp}%"
+
+[[block]]
+block = "cpu"
+interval = 0.5
+format = "{barchart} {utilization}"
+# per_core = true
+# format = "{barchart} {utilization} {frequency}"
+
+[[block]]
+block = "pomodoro"
+length = 1
+break_length = 1
+message = "Take a break!"
+break_message = "Back to work!"
+# use_nag = true
+# nag_path = "i3-nagbar"
+
+# [[block]]
+# block = "load"
+# interval = 0.5
+# format = "{1m}"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "uptime"
+
+[[block]]
+block = "time"
+interval = 60
+format = "%a %d/%m %R"
+
+[[block]]
+block = "custom"
+cycle = ["echo OFF"]
+on_click = "nwgbar"

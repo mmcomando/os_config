@@ -18,8 +18,8 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-# set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu nwggrid -f -p
+set $menu dmenu_path | dmenu | xargs swaymsg exec --
+
 
 ### Output configuration
 #
@@ -78,7 +78,7 @@ input * {
 
     # Start your launcher
     bindsym $mod+d exec $menu
-    bindsym F1 exec $menu
+    bindsym F1 exec nwggrid -f -p
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -214,7 +214,8 @@ bar {
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+    # status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+    status_command i3status-rs ~/os_config/sway/configuration.i3status
 
     colors {
         statusline #ffffff
@@ -224,22 +225,34 @@ bar {
 }
 
 
-#set $my_wallpaper_fhd  ~/os_config/wallpaper/34440x1440/eclipse.jpg
-#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/engine.jpg
-#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/mountains.jpg
-#set $my_wallpaper_fhd  ~/os_config/wallpaper/34440x1440/nebula.jpg
-#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/tunel.png
-#set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/warsaw.png
-set $my_wallpaper_fhd  ~/os_config/wallpaper/1920x1200/crysis.jpg
-set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/endgame.png
+#
+# Monitors configuration:
+#
 
-output DP-1 pos 0 0
-output DVI-D-2  pos 3440 0
-workspace 1 output DVI-D-2
-workspace 2 output DP-1
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/eclipse.jpg
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/engine.jpg
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/mountains.jpg
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/nebula.jpg
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/tunel.png
+    #set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/warsaw.png
+    set $my_wallpaper_fhd  ~/os_config/wallpaper/1920x1200/crysis.jpg
+    set $my_wallpaper_uw  ~/os_config/wallpaper/34440x1440/endgame.png
+
+    # Show available outputs: swaymsg -t get_outputs
+    # 1920x1200 monitor on left
+    output HDMI-A-1 pos 0 110
+    # 34440x1440 monitor on middle
+    output DP-1 pos 1920 0
+    # middle
+    workspace 1 output DP-1
+    # middle left
+    workspace 2 output HDMI-A-1
 
 output DP-1 background $my_wallpaper_uw fit
-output DVI-D-2 background $my_wallpaper_fhd center
+output HDMI-A-1 background $my_wallpaper_fhd center
 
-
-exec swaymsg 'workspace 1; exec firefox'
+#
+# Startup programs:
+#
+    exec swaymsg 'workspace 1; exec code'
+    exec swaymsg 'workspace 1; exec alacritty'
