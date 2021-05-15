@@ -2,12 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# To upgrade:
+# sudo nix-channel --update
+# sudo nix-channel --update nixos-unstable
+# sudo nixos-rebuild switch --upgrade
+
+
 { config, pkgs, ... }:
 
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+let unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+
 in
 {
   imports =
@@ -15,13 +19,6 @@ in
       ./hardware-configuration.nix
     ];
 
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
 
   # My additional packages
   nixpkgs.overlays = import /home/pc/os_config/nixos/overlay;
@@ -45,13 +42,16 @@ in
   # Linux kernel options
   boot.kernelPackages = pkgs.linuxPackages_5_10; # On default kernel my 3440x1440 monitor doesn't work
   boot.kernel.sysctl = {
-    "kernel.perf_event_paranoid" = -1; # For perf
+    "kernel.perf_event_paranoid" = -1; # To allow perf usage by normal user
   };
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp5s0.useDHCP = true;
+
+  # Enable root authentication using popup (ex. for gparded)
+  # security.polkit.enable = true;
   
   
   # Enable CUPS to print documents.
@@ -108,6 +108,7 @@ in
   hardware.opengl.driSupport32Bit = true;
   # Enable zsh
   programs.zsh.enable = true;
+  programs.file-roller.enable = true;
 
   # Enable Oh-my-zsh
   programs.zsh.ohMyZsh = {
@@ -150,6 +151,13 @@ in
     vscode
     wget
     xfce.thunar xfce.xfconf xfce.tumbler xfce.exo # File browser
+    slurp grim # Wayland screenshots
+    vlc # videos
+    gimp
+    # gparted
+    # polkit
+    # polkit-kde-agent
+    # polkit_gnome # Enable root authentication using popup (ex. for gparded)
     # Games
     teamspeak_client
     unstable.discord
@@ -159,10 +167,47 @@ in
     nix-prefetch-github # For getting sha256 for github packages
     # Programming
     gdb
-    git
+    gitFull
     hotspot
     linuxPackages.perf
     perf-tools
+    pkg-config
+    python38
+    python38Packages.pip
+    # Game development
+    binutils-unwrapped
+    blender
+    gcc9Stdenv
+    gdc
+    ldc
+    ninja
+    unstable.meson
+    # Bubel engine
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    # Support for some archive formats
+    afio
+    cpio
+    fsarchiver
+    lzma
+    gnutar
+    innoextract
+    p7zip
+    rpmextract
+    runzip
+    s-tar
+    sharutils
+    unar
+    unp
+    unrar
+    unzip
+    xarchive
+    xarchiver
+    zip
+    zpaq
   ];
 
   # Thunar extensions

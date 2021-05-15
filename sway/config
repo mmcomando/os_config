@@ -243,21 +243,24 @@ bar {
     # 3440x1440 monitor on middle
     output DP-1 pos 1920 0
     # middle
+    workspace 3 output DP-1
     workspace 1 output DP-1
     # middle left
     workspace 2 output HDMI-A-1
 
-output DP-1 background $my_wallpaper_uw fit
-output HDMI-A-1 background $my_wallpaper_fhd center
+    output DP-1 background $my_wallpaper_uw fit
+    output HDMI-A-1 background $my_wallpaper_fhd center
 
 #
 # Startup programs:
 #
-    exec swaymsg 'workspace 1; exec alacritty'
-    exec swaymsg 'workspace 1; exec code'
+    exec swaymsg 'workspace 3; exec alacritty'
+    exec swaymsg 'workspace 3; exec code'
 
 #
 # Other:
 #
     bindsym Ctrl+Shift+Escape exec gnome-system-monitor
     bindsym F1 exec nwggrid -f -p
+    # exec $(nix eval nixos.polkit_gnome.outPath)/libexec/polkit-gnome-authentication-agent-1
+    # exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
