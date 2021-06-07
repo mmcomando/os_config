@@ -254,8 +254,8 @@ bar {
 #
 # Startup programs:
 #
-    exec swaymsg 'workspace 3; exec alacritty'
-    exec swaymsg 'workspace 3; exec code'
+    # exec swaymsg 'workspace 3; exec alacritty'
+    # exec swaymsg 'workspace 3; exec code'
 
 #
 # Other:

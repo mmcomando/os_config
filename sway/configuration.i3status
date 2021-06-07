@@ -52,5 +52,16 @@ format = "%a %d/%m %R"
 
 [[block]]
 block = "custom"
+interval = 1
+command = ''' python3 ~/os_config/scripts/get_gpu_usage.py '''
+
+
+[[block]]
+block = "custom"
+command = "uname -r"
+interval = "once"
+
+[[block]]
+block = "custom"
 cycle = ["echo OFF"]
 on_click = "nwgbar"

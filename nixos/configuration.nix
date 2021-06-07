@@ -99,13 +99,20 @@ in
   # Enable sound.
   # sound.enable = true;
   hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Games
   programs.steam.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+  hardware.opengl = {
+    enable = true;
+    # driSupport = true;
+    driSupport32Bit = true;
+    # package = unstable.mesa_drivers;
+    # package32 = unstable.pkgsi686Linux.mesa.drivers;
+  };
   # Enable zsh
   programs.zsh.enable = true;
   programs.file-roller.enable = true;
@@ -162,6 +169,8 @@ in
     teamspeak_client
     unstable.discord
     wineWowPackages.stable
+    vulkan-tools
+    lutris
     # NixOS development
     mm_hello # My test package :)
     nix-prefetch-github # For getting sha256 for github packages
