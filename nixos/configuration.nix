@@ -36,7 +36,7 @@ in
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sdb"; # or "nodev" for efi only
+  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -45,7 +45,7 @@ in
   time.timeZone = "Europe/Warsaw";
 
   # Linux kernel options
-  boot.kernelPackages = pkgs.linuxPackages_5_10; # On default kernel my 3440x1440 monitor doesn't work
+  # boot.kernelPackages = pkgs.linuxPackages_5_10; # On default kernel my 3440x1440 monitor doesn't work
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = -1; # To allow perf usage by normal user
   };
@@ -136,7 +136,7 @@ in
   };
 
   # Auto log in
-  services.mingetty.autologinUser = "pc";
+  services.getty.autologinUser = "pc";
   nixpkgs.config.allowUnfree = true;
 
   environment.enableDebugInfo = true;
@@ -145,7 +145,7 @@ in
   # $ sudo nix-collect-garbage -d  # Remove unused packages and old sys configurations
   environment.systemPackages = with pkgs; [
     # Basic programs
-    chromium # Sometimes has something with Firefox doesn't have
+    chromium # Sometimes has something which Firefox doesn't have
     fd # Better find
     firefox # Main browser
     font-awesome # For icons in i3status-rust
@@ -164,18 +164,18 @@ in
     wget
     xfce.thunar xfce.xfconf xfce.tumbler xfce.exo # File browser
     slurp grim # Wayland screenshots
-    vlc # videos
+    vlc # Videos
     gimp
     # gparted
     # polkit
     # polkit-kde-agent
     # polkit_gnome # Enable root authentication using popup (ex. for gparded)
     # Games
-    teamspeak_client
+    # teamspeak_client
     unstable.discord
     wineWowPackages.stable
     vulkan-tools
-    lutris
+    # lutris
     # NixOS development
     mm_hello # My test package :)
     nix-prefetch-github # For getting sha256 for github packages
@@ -233,7 +233,7 @@ in
 
   # Available fonts
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
       font-awesome
@@ -269,7 +269,7 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09";
+  system.stateVersion = "21.05";
 
 }
 
