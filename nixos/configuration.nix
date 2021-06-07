@@ -7,6 +7,11 @@
 # sudo nix-channel --update nixos-unstable
 # sudo nixos-rebuild switch --upgrade
 
+# Clean up
+# sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+# nix-collect-garbage -d
+# sudo nix-collect-garbage -d # Careful! removes old generations
+
 
 { config, pkgs, ... }:
 
