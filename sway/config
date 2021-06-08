@@ -265,11 +265,10 @@ bar {
     # exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
     # Different borders
-    bindsym F3 border toggle
-    for_window [class="Firefox"] border csd
+    for_window [class="Firefox"] border none
 
     # Quake like console
-    bindsym F4 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
+    bindsym F3 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
     exec alacritty --class=terminal_scratchpad
     # swaymsg "[app_id=\"terminal_scratchpad\"] resize set 90 ppt 10 ppt"
     # swaymsg "[app_id="terminal_scratchpad"] move scratchpad"
