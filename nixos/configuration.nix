@@ -24,6 +24,10 @@ in
       ./hardware-configuration.nix
     ];
 
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "ondemand"; # From 47 FPS to 140 FPS in CS:GO
+  };
 
   # My additional packages
   nixpkgs.overlays = import /home/pc/os_config/nixos/overlay;
