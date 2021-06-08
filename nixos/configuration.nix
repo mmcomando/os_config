@@ -170,10 +170,9 @@ in
     slurp grim # Wayland screenshots
     vlc # Videos
     gimp
-    # gparted
-    # polkit
-    # polkit-kde-agent
-    # polkit_gnome # Enable root authentication using popup (ex. for gparded)
+    gparted # This works: sudo -EH gparted
+    pcmanfm
+    termite
     # Games
     # teamspeak_client
     unstable.discord
@@ -228,8 +227,12 @@ in
     zpaq
   ];
 
-  # Thunar extensions
+  # Automount extensions
   services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  services.devmon.enable = true;
+
+  # Thunar extensions
   services.xserver.desktopManager.xfce.thunarPlugins = [
     pkgs.xfce.thunar-archive-plugin
     pkgs.xfce.thunar-volman
