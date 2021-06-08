@@ -243,7 +243,6 @@ bar {
     # 3440x1440 monitor on middle
     output DP-1 pos 1920 0
     # middle
-    workspace 3 output DP-1
     workspace 1 output DP-1
     # middle left
     workspace 2 output HDMI-A-1
@@ -254,8 +253,8 @@ bar {
 #
 # Startup programs:
 #
-    # exec swaymsg 'workspace 3; exec alacritty'
-    # exec swaymsg 'workspace 3; exec code'
+   # exec swaymsg 'workspace 3; exec alacritty'
+   # exec swaymsg 'workspace 3; exec code'
 
 #
 # Other:
@@ -264,3 +263,13 @@ bar {
     bindsym F1 exec nwggrid -f -p
     # exec $(nix eval nixos.polkit_gnome.outPath)/libexec/polkit-gnome-authentication-agent-1
     # exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+
+    # Different borders
+    bindsym F3 border toggle
+    for_window [class="Firefox"] border csd
+
+    # Quake like console
+    bindsym F4 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
+    exec alacritty --class=terminal_scratchpad
+    # swaymsg "[app_id=\"terminal_scratchpad\"] resize set 90 ppt 10 ppt"
+    # swaymsg "[app_id="terminal_scratchpad"] move scratchpad"
