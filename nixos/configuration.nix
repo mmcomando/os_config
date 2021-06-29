@@ -61,8 +61,8 @@ in
 
   # Enable root authentication using popup (ex. for gparded)
   # security.polkit.enable = true;
-  
-  
+
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
   # Add printer by web interface: http://localhost:631/printers
@@ -99,7 +99,7 @@ in
   # Enable the GNOME 3 Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome3.enable = true;
-  
+
 
   # Configure keymap in X11
   services.xserver.layout = "pl";
@@ -173,6 +173,8 @@ in
     gparted # This works: sudo -EH gparted
     pcmanfm
     termite
+    # texlive.combined.scheme-full # Quite heavy, use when needed
+    # texstudio
     # Games
     # teamspeak_client
     unstable.discord
@@ -198,6 +200,7 @@ in
     gdc
     ldc
     ninja
+    cjson
     unstable.meson
     # Bubel engine
     SDL2

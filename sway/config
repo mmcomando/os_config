@@ -260,7 +260,7 @@ bar {
 # Other:
 #
     bindsym Ctrl+Shift+Escape exec gnome-system-monitor
-    bindsym F1 exec nwggrid -f -p
+    bindsym Ctrl+Shift+Alt+F2 exec nwggrid -f -p
     # exec $(nix eval nixos.polkit_gnome.outPath)/libexec/polkit-gnome-authentication-agent-1
     # exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
@@ -268,7 +268,8 @@ bar {
     for_window [class="Firefox"] border none
 
     # Quake like console
-    bindsym F3 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
+    bindsym Ctrl+Shift+Alt+F1 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
+    for_window [app_id="terminal_scratchpad"] move scratchpad
     exec alacritty --class=terminal_scratchpad
-    # swaymsg "[app_id=\"terminal_scratchpad\"] resize set 90 ppt 10 ppt"
     # swaymsg "[app_id="terminal_scratchpad"] move scratchpad"
+    # swaymsg "[app_id=\"terminal_scratchpad\"] resize set 90 ppt 10 ppt"
