@@ -1,0 +1,14 @@
+[Default Applications]
+text/html=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+inode/directory=pcmanfm.desktop
+
+[Added Associations]
+image/jpeg=firefox.desktop;gimp.desktop;
+image/png=firefox.desktop;gimp.desktop;
+application/x-ms-dos-executable=wine.desktop;
+application/octet-stream=code.desktop;
+application/vnd.ms-publisher=code.desktop;

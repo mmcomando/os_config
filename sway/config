@@ -255,6 +255,7 @@ bar {
 #
    # exec swaymsg 'workspace 3; exec alacritty'
    # exec swaymsg 'workspace 3; exec code'
+   exec /run/current-system/sw/libexec/polkit-gnome-authentication-agent-1
 
 #
 # Other:

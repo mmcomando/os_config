@@ -33,7 +33,7 @@ in
   };
 
   # My additional packages
-  nixpkgs.overlays = import /home/pc/os_config/nixos/overlay;
+  # nixpkgs.overlays = import /home/pc/os_config/nixos/overlay;
 
   # Use the GRUB 2 boot loader.
 
@@ -52,7 +52,6 @@ in
   time.timeZone = "Europe/Warsaw";
 
   # Linux kernel options
-  # boot.kernelPackages = pkgs.linuxPackages_5_10; # On default kernel my 3440x1440 monitor doesn't work
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = -1; # To allow perf usage by normal user
   };
@@ -63,19 +62,15 @@ in
   networking.interfaces.enp5s0.useDHCP = true;
 
   # Enable root authentication using popup (ex. for gparded)
-  # security.polkit.enable = true;
-  # rtkit is optional but recommended
+  security.polkit.enable = true;
+  # Audio using pipewire
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
     media-session.enable = true;
   };
 
@@ -96,8 +91,6 @@ in
     keyMap = "pl";
   };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true; # so that gtk works properly
@@ -111,20 +104,10 @@ in
     # ];
   };
 
-  # gtk.iconCache.enable = true;
-  # Enable the GNOME 3 Desktop Environment.
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome3.enable = true;
-
 
   # Configure keymap in X11
   services.xserver.layout = "pl";
   services.xserver.xkbVariant = "colemak";
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-  # hardware.pulseaudio.support32Bit = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -135,8 +118,6 @@ in
     enable = true;
     # driSupport = true;
     driSupport32Bit = true;
-    # package = unstable.mesa_drivers;
-    # package32 = unstable.pkgsi686Linux.mesa.drivers;
   };
   # Enable zsh
   programs.zsh.enable = true;
@@ -151,7 +132,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "sway" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "sway" "storage" "video"]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh; # Make zsh default shell
   };
 
@@ -160,6 +141,7 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.enableDebugInfo = true;
+  environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
   environment.systemPackages = with pkgs; [
     # Basic programs
     chromium # Sometimes has something which Firefox doesn't have
@@ -179,14 +161,20 @@ in
     vim
     vscode
     wget
-    xfce.thunar xfce.xfconf xfce.tumbler xfce.exo # File browser
     slurp grim # Wayland screenshots
     vlc # Videos
     gimp
-    gparted # This works: sudo -EH gparted
     pcmanfm
     termite
     qjackctl
+    gthumb
+    kitty
+    xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
+    polkit_gnome
+    # Filesystem
+    btrfs-progs
+    gparted # This works: sudo -EH gparted
+    ntfs3g
     # texlive.combined.scheme-full # Quite heavy, use when needed
     # texstudio
     # Games
@@ -196,7 +184,7 @@ in
     vulkan-tools
     # lutris
     # NixOS development
-    mm_hello # My test package :)
+    # mm_hello # My test package :)
     nix-prefetch-github # For getting sha256 for github packages
     # Programming
     gdb
@@ -247,13 +235,8 @@ in
   # Automount extensions
   services.gvfs.enable = true;
   services.udisks2.enable = true;
-  services.devmon.enable = true;
+  programs.gnome-disks.enable = true;
 
-  # Thunar extensions
-  services.xserver.desktopManager.xfce.thunarPlugins = [
-    pkgs.xfce.thunar-archive-plugin
-    pkgs.xfce.thunar-volman
-  ];
 
   # Available fonts
   fonts = {
@@ -268,31 +251,9 @@ in
       terminus_font
     ];
   };
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
-  # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05";
 
 }
