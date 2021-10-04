@@ -19,7 +19,6 @@
 { config, pkgs, ... }:
 
 let unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
-
 in
 {
   imports =
@@ -97,7 +96,9 @@ in
     # extraPackages = with pkgs; [
     #   swaylock
     #   swayidle
-    #   wl-clipboard
+      # wl-clipboard
+      # clipman
+      # wofi
     #   mako # notification daemon
     #   alacritty # Alacritty is the default terminal in the config
     #   dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
@@ -148,6 +149,7 @@ in
     fd # Better find
     firefox # Main browser
     font-awesome # For icons in i3status-rust
+    fzf
     glib # For trash support
     gnome3.gnome-system-monitor # Task manager
     hicolor-icon-theme # Icons, for thunar?
@@ -171,6 +173,10 @@ in
     kitty
     xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
     polkit_gnome
+    # Sway
+    wl-clipboard
+    clipman
+    wofi
     # Filesystem
     btrfs-progs
     gparted # This works: sudo -EH gparted
@@ -187,6 +193,8 @@ in
     # mm_hello # My test package :)
     nix-prefetch-github # For getting sha256 for github packages
     # Programming
+    unstable.neovim
+    unstable.neovim-qt
     gdb
     gitFull
     hotspot
@@ -195,6 +203,8 @@ in
     pkg-config
     python38
     python38Packages.pip
+    # Games
+    openmw
     # Game development
     binutils-unwrapped
     blender

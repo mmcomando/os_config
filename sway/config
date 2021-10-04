@@ -13,6 +13,9 @@ set $left n
 set $down e
 set $up i
 set $right o
+set $screen_left HDMI-A-1
+set $screen_right DP-1
+
 # Your preferred terminal emulator
 set $term alacritty
 # Your preferred application launcher
@@ -22,14 +25,6 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 
 ### Output configuration
-#
-# Default wallpaper
-#output * bg ~/.config/sway/backgrounds/Sway_Wallpaper_Blue_1920x1080.png fill
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
@@ -228,42 +223,34 @@ bar {
 # Monitors configuration:
 #
 
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/eclipse.jpg
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/engine.jpg
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/mountains.jpg
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/nebula.jpg
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/tunel.png
-    #set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/warsaw.png
     set $my_wallpaper_fhd  ~/os_config/wallpaper/1920x1200/crysis.jpg
     set $my_wallpaper_uw  ~/os_config/wallpaper/3440x1440/endgame.png
 
     # Show available outputs: swaymsg -t get_outputs
     # 1920x1200 monitor on left
-    output HDMI-A-1 pos 0 110
+    output $screen_left pos 0 110
     # 3440x1440 monitor on middle
-    output DP-1 pos 1920 0
-    # middle
-    workspace 1 output DP-1
-    # middle left
-    workspace 2 output HDMI-A-1
+    output $screen_right pos 1920 0
 
-    output DP-1 background $my_wallpaper_uw fit
-    output HDMI-A-1 background $my_wallpaper_fhd center
+    output $screen_right background $my_wallpaper_uw fit
+    output $screen_left background $my_wallpaper_fhd center
 
 #
 # Startup programs:
 #
-   # exec swaymsg 'workspace 3; exec alacritty'
-   # exec swaymsg 'workspace 3; exec code'
-   exec /run/current-system/sw/libexec/polkit-gnome-authentication-agent-1
+   # exec swaymsg 'workspace 2; exec code'
+   # exec swaymsg 'workspace 3; exec nvim-qt'
+   # exec swaymsg 'workspace control; exec pavucontrol'
+   # exec swaymsg 'workspace control; exec gnome-system-monitor'
+   # exec /run/current-system/sw/libexec/polkit-gnome-authentication-agent-1
 
 #
 # Other:
 #
+
+   # exec swaymsg 'workspace 3; exec code'
     bindsym Ctrl+Shift+Escape exec gnome-system-monitor
     bindsym Ctrl+Shift+Alt+F2 exec nwggrid -f -p
-    # exec $(nix eval nixos.polkit_gnome.outPath)/libexec/polkit-gnome-authentication-agent-1
-    # exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
     # Different borders
     for_window [class="Firefox"] border none
@@ -272,5 +259,20 @@ bar {
     bindsym Ctrl+Shift+Alt+F1 exec python3 /home/pc/os_config/scripts/quake_like_terminal.py
     for_window [app_id="terminal_scratchpad"] move scratchpad
     exec alacritty --class=terminal_scratchpad
-    # swaymsg "[app_id="terminal_scratchpad"] move scratchpad"
-    # swaymsg "[app_id=\"terminal_scratchpad\"] resize set 90 ppt 10 ppt"
+
+    bindsym Ctrl+$mod+Right move workspace to output right
+    bindsym Ctrl+$mod+Left move workspace to output left
+    bindsym Ctrl+$mod+$right move workspace to output right
+    bindsym Ctrl+$mod+$left move workspace to output left
+    bindsym $mod+Alt+Right workspace next_on_output
+    bindsym $mod+Alt+Left workspace prev_on_output
+    bindsym $mod+Alt+$right workspace next_on_output
+    bindsym $mod+Alt+$left workspace prev_on_output
+
+    exec wl-paste -t text --watch clipman store
+    exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
+    bindsym $mod+z exec clipman pick -t wofi
+
+    workspace 2 output $screen_left
+    workspace 1 output $screen_right
+
