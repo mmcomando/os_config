@@ -18,3 +18,6 @@ ln -sf ~/os_config/sway/config ~/.config/sway/config
 
 mkdir -p ~/.config/i3status-rust
 ln -sf ~/os_config/sway/configuration.i3status ~/.config/i3status-rust/config.toml
+
+mkdir -p ~/.config/nvim
+ln -sf ~/os_config/nvim/init.vim ~/.config/nvim/init.vim
