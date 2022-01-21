@@ -20,7 +20,7 @@ set autoread
 set listchars=tab:→\ ,eol:↲,space:•
 set list
 set scrolloff=20
-
+set wrap!
 
 
 
@@ -37,7 +37,6 @@ Plug 'preservim/nerdcommenter'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'alexaandru/nvim-lspupdate'
 Plug 'neovim/nvim-lspconfig'
-"Plug 'williamboman/nvim-lsp-installer'
 call plug#end()
 
 
@@ -70,6 +69,7 @@ noremap <S-n> <C-O>
 noremap <S-o> <C-I>
 noremap <S-e> <C-d>
 noremap <S-i> <C-u>
+noremap <S-t> :w<CR> :execute '!'  getcwd() . '/test.sh'<CR>
 noremap , i
 noremap o l
 noremap i k

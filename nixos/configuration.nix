@@ -133,7 +133,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "sway" "storage" "video"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "sway" "storage" "video"];
     shell = pkgs.zsh; # Make zsh default shell
   };
 
@@ -145,11 +145,11 @@ in
   environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
   environment.systemPackages = with pkgs; [
     # Basic programs
-    chromium # Sometimes has something which Firefox doesn't have
+    chromium # Sometimes has something which Firefox doesn't have, better printing support
     fd # Better find
     firefox # Main browser
     font-awesome # For icons in i3status-rust
-    fzf
+    fzf # Fuzzy finder
     glib # For trash support
     gnome3.gnome-system-monitor # Task manager
     hicolor-icon-theme # Icons, for thunar?
@@ -165,10 +165,11 @@ in
     wget
     slurp grim # Wayland screenshots
     vlc # Videos
-    gimp
+    appimage-run
+    # gimp
     pcmanfm
     termite
-    qjackctl
+    # qjackctl
     gthumb
     kitty
     xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
@@ -185,29 +186,35 @@ in
     # texstudio
     # Games
     # teamspeak_client
-    unstable.discord
-    wineWowPackages.stable
+    # unstable.discord
+    # wineWowPackages.staging
+    unstable.wine64Packages.stagingFull
+    unstable.winePackages.stagingFull
+    unstable.winetricks
+    # (winetricks.override { wine = wineWowPackages.staging; })
     vulkan-tools
     # lutris
+    sc-controller
     # NixOS development
     # mm_hello # My test package :)
-    nix-prefetch-github # For getting sha256 for github packages
+    # nix-prefetch-github # For getting sha256 for github packages
     # Programming
-    unstable.neovim
-    unstable.neovim-qt
+    # unstable.neovim
+    # unstable.neovim-qt
     gdb
     gitFull
-    hotspot
+    # hotspot
     linuxPackages.perf
     perf-tools
     pkg-config
     python38
     python38Packages.pip
     # Games
-    openmw
+    # lutris
+    # openmw
     # Game development
     binutils-unwrapped
-    blender
+    # blender
     gcc9Stdenv
     gdc
     ldc
@@ -264,7 +271,7 @@ in
 
 
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "21.11";
 
 }
 
