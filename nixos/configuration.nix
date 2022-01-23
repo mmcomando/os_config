@@ -2,6 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# Add unstable channel
+# sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+# sudo nix-channel --update
+
 # To upgrade:
 # sudo nix-channel --update
 # sudo nix-channel --update nixos-unstable
@@ -31,11 +35,7 @@ in
     cpuFreqGovernor = "ondemand"; # From 47 FPS to 140 FPS in CS:GO
   };
 
-  # My additional packages
-  # nixpkgs.overlays = import /home/pc/os_config/nixos/overlay;
-
   # Use the GRUB 2 boot loader.
-
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   # boot.loader.grub.efiSupport = true;
@@ -50,10 +50,10 @@ in
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
 
-  # Linux kernel options
-  boot.kernel.sysctl = {
-    "kernel.perf_event_paranoid" = -1; # To allow perf usage by normal user
-  };
+  # Allow perf as user
+  boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
+  boot.kernel.sysctl."kernel.kptr_restrict" = 0;
+
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
@@ -89,6 +89,10 @@ in
     font = "Lat2-Terminus16";
     keyMap = "pl";
   };
+
+  # Required for icons in dolphin; https://github.com/NixOS/nixpkgs/issues/25762
+  # Then requires configuration of theme in qt5ct program
+  programs.qt5ct.enable = true;
 
   programs.sway = {
     enable = true;
@@ -159,7 +163,7 @@ in
     pulseaudio pavucontrol # For audio inputs/outputs
     tango-icon-theme # For icons in thunar
     unstable.i3status-rust # Bar
-    unstable.wally-cli # To install moonlander keyboard firmware
+    wally-cli # To install moonlander keyboard firmware
     vim
     vscode
     wget
@@ -168,6 +172,7 @@ in
     appimage-run
     # gimp
     pcmanfm
+    dolphin
     termite
     # qjackctl
     gthumb
@@ -179,7 +184,7 @@ in
     clipman
     wofi
     # Filesystem
-    btrfs-progs
+    # btrfs-progs
     gparted # This works: sudo -EH gparted
     ntfs3g
     # texlive.combined.scheme-full # Quite heavy, use when needed
@@ -192,7 +197,7 @@ in
     unstable.winePackages.stagingFull
     unstable.winetricks
     # (winetricks.override { wine = wineWowPackages.staging; })
-    vulkan-tools
+    # vulkan-tools
     # lutris
     sc-controller
     # NixOS development
@@ -203,7 +208,7 @@ in
     # unstable.neovim-qt
     gdb
     gitFull
-    # hotspot
+    hotspot
     linuxPackages.perf
     perf-tools
     pkg-config
@@ -216,11 +221,11 @@ in
     binutils-unwrapped
     # blender
     gcc9Stdenv
-    gdc
-    ldc
-    ninja
-    cjson
-    unstable.meson
+    # gdc
+    # ldc
+    # ninja
+    # cjson
+    # unstable.mesoin
     # Bubel engine
     SDL2
     SDL2_image
