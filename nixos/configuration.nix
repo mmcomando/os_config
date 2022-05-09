@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 # Add unstable channel
+# sudo nix-channel --add https://nixos.org/channels/nixos-21.11 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
 
@@ -10,11 +11,12 @@
 # sudo nix-channel --update
 # sudo nix-channel --update nixos-unstable
 # sudo nixos-rebuild switch --upgrade
+# sudo nixos-rebuild switch --rollback
 
 # Clean up
 # sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 # nix-collect-garbage -d
-# sudo nix-collect-garbage -d # Careful! removes old generations
+# sudo nix-collect-garbage -d # Careful! removes old generation
 
 # List packages installed in system profile. To search, run:
 # nix search wget
@@ -75,7 +77,7 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-  # Add printer by web interface: http://localhost:631/printers
+  # Add printer by web interface: http://localhost:631/printers  ; then Add printer, for Brother HL-L2350DW use HL-L2360D model from list
   services.printing.drivers = [
     pkgs.brlaser # For brother printers
   ];
@@ -148,7 +150,9 @@ in
   environment.enableDebugInfo = true;
   environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
   environment.systemPackages = with pkgs; [
+    usbutils # lsusb
     # Basic programs
+    pinta # Image draw/edit
     chromium # Sometimes has something which Firefox doesn't have, better printing support
     fd # Better find
     firefox # Main browser
@@ -162,7 +166,7 @@ in
     nwg-launchers # Launcher of applications with apps icons
     pulseaudio pavucontrol # For audio inputs/outputs
     tango-icon-theme # For icons in thunar
-    unstable.i3status-rust # Bar
+    i3status-rust # Bar
     wally-cli # To install moonlander keyboard firmware
     vim
     vscode
@@ -174,7 +178,7 @@ in
     pcmanfm
     dolphin
     termite
-    # qjackctl
+    qjackctl # Advanced audion input/output control
     gthumb
     kitty
     xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
@@ -193,13 +197,13 @@ in
     # teamspeak_client
     # unstable.discord
     # wineWowPackages.staging
-    unstable.wine64Packages.stagingFull
-    unstable.winePackages.stagingFull
-    unstable.winetricks
+    # unstable.wine64Packages.stagingFull
+    # unstable.winePackages.stagingFull
+    # unstable.winetricks
     # (winetricks.override { wine = wineWowPackages.staging; })
     # vulkan-tools
     # lutris
-    sc-controller
+    # sc-controller
     # NixOS development
     # mm_hello # My test package :)
     # nix-prefetch-github # For getting sha256 for github packages
@@ -219,7 +223,7 @@ in
     # openmw
     # Game development
     binutils-unwrapped
-    # blender
+    blender
     gcc9Stdenv
     # gdc
     # ldc
