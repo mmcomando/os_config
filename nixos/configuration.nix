@@ -4,6 +4,7 @@
 
 # Add unstable channel
 # sudo nix-channel --add https://nixos.org/channels/nixos-21.11 nixos
+# sudo nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
 
@@ -60,7 +61,7 @@ in
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp5s0.useDHCP = true;
+  networking.interfaces.enp7s0.useDHCP = true;
 
   # Enable root authentication using popup (ex. for gparded)
   security.polkit.enable = true;
@@ -72,7 +73,6 @@ in
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
-    media-session.enable = true;
   };
 
   # Enable CUPS to print documents.
@@ -133,7 +133,7 @@ in
   # Enable Oh-my-zsh
   programs.zsh.ohMyZsh = {
     enable = true;
-    plugins = [ "git" "sudo" "docker" "kubectl" ];
+    plugins = [ "git" "sudo" ];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -280,7 +280,7 @@ in
 
 
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
 
 }
 
