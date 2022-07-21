@@ -61,6 +61,8 @@ in
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
+  # To check out which network interface to enable checkout cmd 'ifconfig -a'
+  # Network interface name might change for examle after GPU replacement
   networking.interfaces.enp7s0.useDHCP = true;
 
   # Enable root authentication using popup (ex. for gparded)
@@ -150,22 +152,30 @@ in
   environment.enableDebugInfo = true;
   environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
   environment.systemPackages = with pkgs; [
+    mako # Notifications
+    jq # Command line utility to parse and get values from json output
+    alacritty # Terminal
     usbutils # lsusb
     # Basic programs
     pinta # Image draw/edit
     chromium # Sometimes has something which Firefox doesn't have, better printing support
     fd # Better find
     firefox # Main browser
-    font-awesome # For icons in i3status-rust
     fzf # Fuzzy finder
     glib # For trash support
+
+    # Themes
+    font-awesome # For icons in i3status-rust
     gnome3.gnome-system-monitor # Task manager
-    hicolor-icon-theme # Icons, for thunar?
+    dracula-theme # Additional themes, maybe will fix lack of icons in nwg-launchers
+    gnome3.adwaita-icon-theme # Additional themes, maybe will fix lack of icons in nwg-launchers
+    hicolor-icon-theme  # Additional themes, maybe will fix lack of icons in nwg-launchers
+    tango-icon-theme # For icons in thunar
+
     libreoffice # Documents editing
     mesa-demos # glxinfo
     nwg-launchers # Launcher of applications with apps icons
     pulseaudio pavucontrol # For audio inputs/outputs
-    tango-icon-theme # For icons in thunar
     i3status-rust # Bar
     wally-cli # To install moonlander keyboard firmware
     vim
@@ -184,7 +194,7 @@ in
     xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
     polkit_gnome
     # Sway
-    wl-clipboard
+    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
     clipman
     wofi
     # Filesystem
