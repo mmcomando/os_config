@@ -8,10 +8,13 @@
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
 
+# Set current generation as default to boot
+# /run/current-system/bin/switch-to-configuration boot
+
 # To upgrade:
 # sudo nix-channel --update
 # sudo nix-channel --update nixos-unstable
-# sudo nixos-rebuild switch --upgrade
+# sudo nixos-rebuild switch --upgrade-all
 # sudo nixos-rebuild switch --rollback
 
 # Clean up
@@ -145,6 +148,9 @@ in
     shell = pkgs.zsh; # Make zsh default shell
   };
 
+  # maybe useful for authentication, might be used by vs-code
+  # services.gnome.gnome-keyring.enable = true;
+
   # Auto log in
   services.getty.autologinUser = "pc";
   nixpkgs.config.allowUnfree = true;
@@ -163,6 +169,7 @@ in
     firefox # Main browser
     fzf # Fuzzy finder
     glib # For trash support
+    gnome.gnome-terminal # May help with drag and drop while uncompressing data
 
     # Themes
     font-awesome # For icons in i3status-rust
@@ -186,7 +193,7 @@ in
     appimage-run
     # gimp
     pcmanfm
-    dolphin
+    # dolphin
     termite
     qjackctl # Advanced audion input/output control
     gthumb
@@ -220,6 +227,7 @@ in
     # Programming
     # unstable.neovim
     # unstable.neovim-qt
+    # unstable.tracy
     gdb
     gitFull
     hotspot

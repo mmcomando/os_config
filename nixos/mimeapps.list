@@ -12,3 +12,4 @@ image/png=firefox.desktop;gimp.desktop;
 application/x-ms-dos-executable=wine.desktop;
 application/octet-stream=code.desktop;
 application/vnd.ms-publisher=code.desktop;
+inode/directory=pcmanfm.desktop

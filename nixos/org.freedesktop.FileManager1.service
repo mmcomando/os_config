@@ -1,0 +1,9 @@
+# In firefox opening 'containing folder' of downloaded file takes a lot of time due to:
+# timeout on org.freedesktop.FileManager1 dbus service
+# this service is not present on my system, I use pcmanfm for file manager
+# https://askubuntu.com/questions/530779/change-file-manager-used-by-firefox-on-lubuntu
+# Add this fake service so firefox will fail dbus call immediately and checkout mime types instead
+# Add to location: ~/.local/share/dbus-1/services/org.freedesktop.FileManager1.service
+[D-BUS Service]
+Name=org.freedesktop.FileManager1
+Exec=/usr/bin/false
