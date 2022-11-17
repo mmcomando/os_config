@@ -63,10 +63,11 @@ in
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
+  # networking.useDHCP = false;
   # To check out which network interface to enable checkout cmd 'ifconfig -a'
   # Network interface name might change for examle after GPU replacement
-  networking.interfaces.enp7s0.useDHCP = true;
+  # networking.interfaces.enp3s0.useDHCP = true;
+  networking.networkmanager.enable = true;
 
   # Enable root authentication using popup (ex. for gparded)
   security.polkit.enable = true;
@@ -114,6 +115,13 @@ in
     #   alacritty # Alacritty is the default terminal in the config
     #   dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
     # ];
+    extraSessionCommands = ''
+      export SDL_VIDEODRIVER=wayland
+      export QT_QPA_PLATFORM=wayland
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export MOZ_ENABLE_WAYLAND=1
+    '';
   };
 
 
@@ -134,17 +142,25 @@ in
   # Enable zsh
   programs.zsh.enable = true;
   programs.file-roller.enable = true;
+  # services.tumbler.enable = true; # Thumbnail support for images
 
   # Enable Oh-my-zsh
   programs.zsh.ohMyZsh = {
     enable = true;
+    theme = "robbyrussell";
     plugins = [ "git" "sudo" ];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "sway" "storage" "video"];
+    extraGroups = [
+      "wheel"
+      "sway"
+      "storage"
+      "video"
+      "networkmanager" # So user can change network settings
+    ];
     shell = pkgs.zsh; # Make zsh default shell
   };
 
@@ -169,7 +185,8 @@ in
     firefox # Main browser
     fzf # Fuzzy finder
     glib # For trash support
-    gnome.gnome-terminal # May help with drag and drop while uncompressing data
+    lm_sensors # For temperature information
+    hardinfo # GUI for some hw information
 
     # Themes
     font-awesome # For icons in i3status-rust

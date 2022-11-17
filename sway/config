@@ -72,7 +72,7 @@ input * {
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    # bindsym $mod+d exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -248,6 +248,7 @@ bar {
 # Other:
 #
 
+    bindsym $mod+d exec pcmanfm
     # Screenshot
     bindsym $mod+m exec grim -g "$(slurp)" -t png - | wl-copy -t image/png
     bindsym Ctrl+$mod+m exec grim -t png -g "$(slurp)" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).jpg
@@ -288,7 +289,6 @@ bar {
     bindsym $mod+z exec clipman pick -t wofi
 
     workspace 10_tools output $screen_left
-    workspace 4 output $screen_left
     workspace 2 output $screen_left
     workspace 1 output $screen_right
 
