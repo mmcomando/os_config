@@ -1,11 +1,13 @@
 
+chmod a+rw ~/os_config/nixos/configuration.nix
 
 # Shell
 ln -sf ~/os_config/nixos/.profile ~/.profile
 ln -sf ~/os_config/nixos/.profile ~/.zprofile # zsh
 
 # Sway
-cp -f ~/.config/sway/config ~/.config/sway/config_backup
+mkdir -p ~/.config/sway/
+cp -f ~/.config/sway/config ~/.config/sway/config_backup || true
 rm -f ~/.config/sway/config
 ln -sf ~/os_config/sway/config ~/.config/sway/config
 

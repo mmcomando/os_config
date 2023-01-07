@@ -3,8 +3,8 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 # Add unstable channel
-# sudo nix-channel --add https://nixos.org/channels/nixos-21.11 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
+# sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
 
@@ -41,37 +41,50 @@ in
     cpuFreqGovernor = "ondemand"; # From 47 FPS to 140 FPS in CS:GO
   };
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  # Allow non free (steam, itp)
+  nixpkgs.config.allowUnfree = true;
+  # Get debug information for some programs
+  environment.enableDebugInfo = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Set your time zone.
-  time.timeZone = "Europe/Warsaw";
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.kernelModules = [ "kvm-amd" "k10temp" "nct6775" "zenpower" ];
 
   # Allow perf as user
   boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
   boot.kernel.sysctl."kernel.kptr_restrict" = 0;
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  # networking.useDHCP = false;
-  # To check out which network interface to enable checkout cmd 'ifconfig -a'
-  # Network interface name might change for examle after GPU replacement
-  # networking.interfaces.enp3s0.useDHCP = true;
+  networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable root authentication using popup (ex. for gparded)
-  security.polkit.enable = true;
-  # Audio using pipewire
+  # Set your time zone.
+  time.timeZone = "Europe/Warsaw";
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.pc = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel" # For sudo
+      "sway"
+      "storage"
+      "video"
+      "networkmanager" # So user can change network settings
+    ];
+    shell = pkgs.zsh; # Make zsh default shell
+  };
+
+  # Auto log in
+  services.getty.autologinUser = "pc";
+
+  # Enable sound with pipewire.
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -84,23 +97,41 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
   # Add printer by web interface: http://localhost:631/printers  ; then Add printer, for Brother HL-L2350DW use HL-L2360D model from list
+  # If printer not shown after 'Add printer', try 'sudo systemctl restart cups.service' or 'lpinfo -l -v' or 'reconnect USB'
   services.printing.drivers = [
     pkgs.brlaser # For brother printers
   ];
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+
+  # Configure keymap in X11
+  services.xserver.layout = "pl";
+  services.xserver.xkbVariant = "colemak";
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "pl_PL.utf8";
+    LC_IDENTIFICATION = "pl_PL.utf8";
+    LC_MEASUREMENT = "pl_PL.utf8";
+    LC_MONETARY = "pl_PL.utf8";
+    LC_NAME = "pl_PL.utf8";
+    LC_NUMERIC = "pl_PL.utf8";
+    LC_PAPER = "pl_PL.utf8";
+    LC_TELEPHONE = "pl_PL.utf8";
+    LC_TIME = "pl_PL.utf8";
+  };
   console = {
     font = "Lat2-Terminus16";
     keyMap = "pl";
   };
 
-  # Required for icons in dolphin; https://github.com/NixOS/nixpkgs/issues/25762
-  # Then requires configuration of theme in qt5ct program
-  programs.qt5ct.enable = true;
+  # Automount extensions
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  programs.gnome-disks.enable = true;
+
+  # Enable root authentication using popup (ex. for gparded)
+  security.polkit.enable = true;
+  environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
 
   programs.sway = {
     enable = true;
@@ -115,20 +146,18 @@ in
     #   alacritty # Alacritty is the default terminal in the config
     #   dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
     # ];
-    extraSessionCommands = ''
-      export SDL_VIDEODRIVER=wayland
-      export QT_QPA_PLATFORM=wayland
-      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-      export _JAVA_AWT_WM_NONREPARENTING=1
-      export MOZ_ENABLE_WAYLAND=1
-    '';
+    # extraSessionCommands = ''
+    #   export SDL_VIDEODRIVER=wayland # Breaks games on steam (certainly dota2 and CS:GO)
+    #   export QT_QPA_PLATFORM=wayland
+    #   export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+    #   export _JAVA_AWT_WM_NONREPARENTING=1
+    #   export MOZ_ENABLE_WAYLAND=1 # Firefox freezes when using wayland (2022.11)
+    # '';
   };
 
 
-  # Configure keymap in X11
-  services.xserver.layout = "pl";
-  services.xserver.xkbVariant = "colemak";
-
+  # maybe useful for authentication, might be used by vs-code
+  # services.gnome.gnome-keyring.enable = true;
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -142,162 +171,157 @@ in
   # Enable zsh
   programs.zsh.enable = true;
   programs.file-roller.enable = true;
-  # services.tumbler.enable = true; # Thumbnail support for images
 
   # Enable Oh-my-zsh
   programs.zsh.ohMyZsh = {
     enable = true;
     theme = "robbyrussell";
-    plugins = [ "git" "sudo" ];
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.pc = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "sway"
-      "storage"
-      "video"
-      "networkmanager" # So user can change network settings
+    plugins = [
+      "git"
+      "sudo" # add 'sudo' after pressing esc+esc
     ];
-    shell = pkgs.zsh; # Make zsh default shell
   };
 
-  # maybe useful for authentication, might be used by vs-code
-  # services.gnome.gnome-keyring.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+      # # Create a `docker` alias for podman, to use it as a drop-in replacement
+      # dockerCompat = true;
+      # # Required for containers under podman-compose to be able to talk to each other.
+      # defaultNetwork.dnsname.enable = true;
+    };
+  };
 
-  # Auto log in
-  services.getty.autologinUser = "pc";
-  nixpkgs.config.allowUnfree = true;
 
-  environment.enableDebugInfo = true;
-  environment.pathsToLink = [ "/libexec" ]; # Make polkit-gnome-authentication-agent-1 visible under /run/current-system/sw
   environment.systemPackages = with pkgs; [
-    mako # Notifications
-    jq # Command line utility to parse and get values from json output
+
+    (vscode-with-extensions.override {
+      vscodeExtensions = with vscode-extensions; [
+        streetsidesoftware.code-spell-checker
+        vscode-extensions.jnoortheen.nix-ide
+        vscode-extensions.bungcip.better-toml
+        # vscode-extensions.ms-vscode.cpptools # Disable for now as it triggered some errors in vscode
+        vscode-extensions.shardulm94.trailing-spaces
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "code-d";
+          publisher = "webfreak";
+          version = "0.23.2";
+          sha256 = "bff0dc938804f644647c858f0245263ea7b0c935552ab060023a4db8244e0a51";
+        }
+        {
+          name = "vscode-test-explorer";
+          publisher = "hbenl";
+          version = "2.21.1";
+          sha256 = "7c7c9e3ddf1f60fb7bccf1c11a256677c7d1c7e20cdff712042ca223f0b45408";
+        }
+        {
+          name = "test-adapter-converter";
+          publisher = "ms-vscode";
+          version = "0.1.6";
+          sha256 = "502f2d51ef89277afc9dbf52b0f96f557c3be16ef92568cc89f937f490a5445e";
+        }
+        {
+          name = "meson";
+          publisher = "asabil";
+          version = "1.3.0";
+          sha256 = "40ca77744171e8cbb9a60ce4972956e9bfee8186ed6d3feacfc21e7aeccf65e0";
+        }
+        {
+          name = "shader";
+          publisher = "slevesque";
+          version = "1.1.5";
+          sha256 = "3dfdfb15e40c365bfbe1fecb333f7e08ab1c17a5234d9ed9a5c69914ab57d993";
+        }
+      ];
+    })
+    # Main Programs
     alacritty # Terminal
-    usbutils # lsusb
-    # Basic programs
-    pinta # Image draw/edit
+    blender # 3d model editing
     chromium # Sometimes has something which Firefox doesn't have, better printing support
-    fd # Better find
     firefox # Main browser
-    fzf # Fuzzy finder
-    glib # For trash support
-    lm_sensors # For temperature information
+    gparted # This works: sudo -EH gparted
+    gthumb # Images viewer
+    hotspot # Program to analyze memory usage/leaks of given program
+    libreoffice # Documents editing
+    mpv # Player for audio, video
+    pcmanfm # File manager
+    pinta # Image draw/edit
+    vlc # Player for audio, video
+    vscode # vscode
+    teamspeak_client # Talking with people
+    # dolphin # File manager
+    # gimp # Images editing
+    # kitty # Terminal
+    # termite # Terminal
+
+    # Hardware monitoring/configuration tools
     hardinfo # GUI for some hw information
+    lm_sensors # For temperature information
+    mesa-demos # glxinfo
+    parted # For partitioning
+    pulseaudio pavucontrol # For audio inputs/outputs
+    qjackctl # Advanced audion input/output control
+    radeontop # Display AMD GPU usage statistics/bottlenecks
+    usbutils # lsusb
+    vulkan-tools # vkcube
+    wally-cli # To install moonlander keyboard firmware
+    xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
+
+    # Basic cmd tools
+    appimage-run # For runnning appimage programs
+    fd # Better find
+    fzf # Fuzzy finder
+    jq # Command line utility to parse and get values from json output
+    vim # vim
+    wget # Downloading files using command line
+
+    # Sway/Wayland enviroment
+    clipman # Clipboard manager for wayland
+    i3status-rust # Bar
+    mako # Notifications
+    nwg-launchers # Launcher of applications with apps icons
+    slurp grim # Wayland screenshots
+    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    wofi # Wayland native menu
+
+    # Basic system libraries
+    glib # For trash support
+    polkit_gnome # dbus session providing functionality for authenticate popups?
+
+    # Support for some archive formats
+    afio cpio fsarchiver lzma gnutar innoextract p7zip rpmextract runzip
+    s-tar sharutils unar unp unrar unzip xarchive xarchiver zip zpaq
 
     # Themes
-    font-awesome # For icons in i3status-rust
-    gnome3.gnome-system-monitor # Task manager
     dracula-theme # Additional themes, maybe will fix lack of icons in nwg-launchers
+    font-awesome # For icons in i3status-rust
     gnome3.adwaita-icon-theme # Additional themes, maybe will fix lack of icons in nwg-launchers
+    gnome3.gnome-system-monitor # Task manager
     hicolor-icon-theme  # Additional themes, maybe will fix lack of icons in nwg-launchers
     tango-icon-theme # For icons in thunar
 
-    libreoffice # Documents editing
-    mesa-demos # glxinfo
-    nwg-launchers # Launcher of applications with apps icons
-    pulseaudio pavucontrol # For audio inputs/outputs
-    i3status-rust # Bar
-    wally-cli # To install moonlander keyboard firmware
-    vim
-    vscode
-    wget
-    slurp grim # Wayland screenshots
-    vlc # Videos
-    appimage-run
-    # gimp
-    pcmanfm
-    # dolphin
-    termite
-    qjackctl # Advanced audion input/output control
-    gthumb
-    kitty
-    xdg-utils # Default application settings, xdg-mime default nautilus.desktop inode/directory
-    polkit_gnome
-    # Sway
-    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    clipman
-    wofi
-    # Filesystem
-    # btrfs-progs
-    gparted # This works: sudo -EH gparted
-    ntfs3g
-    # texlive.combined.scheme-full # Quite heavy, use when needed
-    # texstudio
-    # Games
-    # teamspeak_client
-    # unstable.discord
-    # wineWowPackages.staging
-    # unstable.wine64Packages.stagingFull
-    # unstable.winePackages.stagingFull
-    # unstable.winetricks
-    # (winetricks.override { wine = wineWowPackages.staging; })
-    # vulkan-tools
-    # lutris
-    # sc-controller
-    # NixOS development
-    # mm_hello # My test package :)
-    # nix-prefetch-github # For getting sha256 for github packages
     # Programming
-    # unstable.neovim
-    # unstable.neovim-qt
-    # unstable.tracy
-    gdb
-    gitFull
-    hotspot
-    linuxPackages.perf
-    perf-tools
+    binutils-unwrapped
+    gcc9Stdenv
+    gdb # Debugging
+    gitFull # git with git-gui
+    linuxPackages.perf perf-tools # perf
     pkg-config
     python38
-    python38Packages.pip
-    # Games
-    # lutris
-    # openmw
-    # Game development
-    binutils-unwrapped
-    blender
-    gcc9Stdenv
-    # gdc
-    # ldc
-    # ninja
-    # cjson
-    # unstable.mesoin
-    # Bubel engine
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
-    # Support for some archive formats
-    afio
-    cpio
-    fsarchiver
-    lzma
-    gnutar
-    innoextract
-    p7zip
-    rpmextract
-    runzip
-    s-tar
-    sharutils
-    unar
-    unp
-    unrar
-    unzip
-    xarchive
-    xarchiver
-    zip
-    zpaq
+
+    # NixOS development
+    # nix-prefetch-github # For getting sha256 for github packages
+
+    # Tex
+    # texlive.combined.scheme-full # Quite heavy, use when needed
+    # texstudio
+
+    # Additional hardware support
+    ntfs3g # ntfs driver
+    # btrfs-progs
+    # sc-controller # Steam controller
   ];
-
-  # Automount extensions
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-  programs.gnome-disks.enable = true;
-
 
   # Available fonts
   fonts = {
@@ -312,7 +336,6 @@ in
       terminus_font
     ];
   };
-
 
 
   system.stateVersion = "22.05";
