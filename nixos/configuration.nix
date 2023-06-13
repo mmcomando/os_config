@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 # Add unstable channel
-# sudo nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
@@ -65,6 +64,8 @@ in
 
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
+  # Docker
+  virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pc = {
@@ -75,6 +76,7 @@ in
       "storage"
       "video"
       "networkmanager" # So user can change network settings
+      "docker"
     ];
     shell = pkgs.zsh; # Make zsh default shell
   };
@@ -98,6 +100,9 @@ in
   services.printing.enable = true;
   # Add printer by web interface: http://localhost:631/printers  ; then Add printer, for Brother HL-L2350DW use HL-L2360D model from list
   # If printer not shown after 'Add printer', try 'sudo systemctl restart cups.service' or 'lpinfo -l -v' or 'reconnect USB'
+  # For adding printer connected to localnetwork:
+  # Find pinter ip address by checking it int router (http://192.168.1.1/)
+  # Then under http://localhost:631/printers add "LPD/LPR Host or Printer" url ip like: socket://<PRINTER IT>
   services.printing.drivers = [
     pkgs.brlaser # For brother printers
   ];
@@ -125,9 +130,12 @@ in
   };
 
   # Automount extensions
+  programs.dconf.enable = true;
   services.gvfs.enable = true;
+  services.devmon.enable = true;
   services.udisks2.enable = true;
   programs.gnome-disks.enable = true;
+  # If fails try to mount using: udisksctl mount -p /dev/sdX9
 
   # Enable root authentication using popup (ex. for gparded)
   security.polkit.enable = true;
@@ -251,17 +259,26 @@ in
     vscode # vscode
     teamspeak_client # Talking with people
     # dolphin # File manager
-    # gimp # Images editing
+    gimp # Images editing
+    imagemagick # Command line image utilities
+    # qbittorrent
+    # lutris
+    rust-analyzer # LSP for rust
+    unstable.helix
+    lazygit
     # kitty # Terminal
     # termite # Terminal
 
     # Hardware monitoring/configuration tools
+    jmtpfs mtpfs # Access phone data
+
     hardinfo # GUI for some hw information
     lm_sensors # For temperature information
     mesa-demos # glxinfo
     parted # For partitioning
     pulseaudio pavucontrol # For audio inputs/outputs
     qjackctl # Advanced audion input/output control
+    easyeffects # pipewire audio input/output control and effects
     radeontop # Display AMD GPU usage statistics/bottlenecks
     usbutils # lsusb
     vulkan-tools # vkcube
@@ -308,7 +325,15 @@ in
     gitFull # git with git-gui
     linuxPackages.perf perf-tools # perf
     pkg-config
-    python38
+    python39
+    python39Packages.pillow
+
+    # 3d printing
+    openscad
+    cura
+
+    # Games
+    lutris
 
     # NixOS development
     # nix-prefetch-github # For getting sha256 for github packages

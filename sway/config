@@ -42,7 +42,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 input * {
     xkb_layout "pl"
-    xkb_variant "colemak"
+    # xkb_variant "colemak"
 }
 
 
@@ -248,6 +248,17 @@ bar {
 # Other:
 #
 
+    # Tablet Input
+    # Compute region:
+    # resolution: (3440x1440)
+    # area wacom: (155x95mm) >$ libinput list-devices
+    # -> 1440 * 152 / 3440 = x -> x / 95 = y (use 'y')
+    input "1386:965:Wacom_Intuos_BT_S_Pen" {
+        map_to_output DP-1
+        map_from_region 0.0x0.0 1.0x0.669
+    }
+
+    # Open file manager
     bindsym $mod+d exec pcmanfm
     # Screenshot
     bindsym $mod+m exec grim -g "$(slurp)" -t png - | wl-copy -t image/png
