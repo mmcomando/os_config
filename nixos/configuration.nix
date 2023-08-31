@@ -3,7 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 # Add unstable channel
-# sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
+# sudo nix-channel --add https://nixos.org/channels/nixos-23.05 nixos
 # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 # sudo nix-channel --update
 
@@ -95,6 +95,9 @@ in
     pulse.enable = true;
     jack.enable = true;
   };
+
+  # Bluetooth
+  # services.blueman.enable = true; # Made main screen look bad
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -249,6 +252,7 @@ in
     chromium # Sometimes has something which Firefox doesn't have, better printing support
     firefox # Main browser
     gparted # This works: sudo -EH gparted
+    btrfs-progs # Tools for btrfs file system
     gthumb # Images viewer
     hotspot # Program to analyze memory usage/leaks of given program
     libreoffice # Documents editing
@@ -264,7 +268,7 @@ in
     # qbittorrent
     # lutris
     rust-analyzer # LSP for rust
-    unstable.helix
+    helix
     lazygit
     # kitty # Terminal
     # termite # Terminal
