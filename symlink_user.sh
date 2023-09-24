@@ -20,3 +20,7 @@ ln -sf ~/os_config/nixos/mimeapps.list ~/.config/mimeapps.list
 
 mkdir -p ~/.local/share/dbus-1/services
 ln -sf ~/os_config/nixos/org.freedesktop.FileManager1.service ~/.local/share/dbus-1/services/org.freedesktop.FileManager1.service
+
+# Helix
+mkdir -p ~/.config/helix/
+ln -sf ~/os_config/helix/config.toml ~/.config/helix/config.toml

@@ -220,30 +220,30 @@ in
           version = "0.23.2";
           sha256 = "bff0dc938804f644647c858f0245263ea7b0c935552ab060023a4db8244e0a51";
         }
-        {
-          name = "vscode-test-explorer";
-          publisher = "hbenl";
-          version = "2.21.1";
-          sha256 = "7c7c9e3ddf1f60fb7bccf1c11a256677c7d1c7e20cdff712042ca223f0b45408";
-        }
-        {
-          name = "test-adapter-converter";
-          publisher = "ms-vscode";
-          version = "0.1.6";
-          sha256 = "502f2d51ef89277afc9dbf52b0f96f557c3be16ef92568cc89f937f490a5445e";
-        }
-        {
-          name = "meson";
-          publisher = "asabil";
-          version = "1.3.0";
-          sha256 = "40ca77744171e8cbb9a60ce4972956e9bfee8186ed6d3feacfc21e7aeccf65e0";
-        }
-        {
-          name = "shader";
-          publisher = "slevesque";
-          version = "1.1.5";
-          sha256 = "3dfdfb15e40c365bfbe1fecb333f7e08ab1c17a5234d9ed9a5c69914ab57d993";
-        }
+        # {
+        #   name = "vscode-test-explorer";
+        #   publisher = "hbenl";
+        #   version = "2.21.1";
+        #   sha256 = "7c7c9e3ddf1f60fb7bccf1c11a256677c7d1c7e20cdff712042ca223f0b45408";
+        # }
+        # {
+        #   name = "test-adapter-converter";
+        #   publisher = "ms-vscode";
+        #   version = "0.1.6";
+        #   sha256 = "502f2d51ef89277afc9dbf52b0f96f557c3be16ef92568cc89f937f490a5445e";
+        # }
+        # {
+        #   name = "meson";
+        #   publisher = "asabil";
+        #   version = "1.3.0";
+        #   sha256 = "40ca77744171e8cbb9a60ce4972956e9bfee8186ed6d3feacfc21e7aeccf65e0";
+        # }
+        # {
+        #   name = "shader";
+        #   publisher = "slevesque";
+        #   version = "1.1.5";
+        #   sha256 = "3dfdfb15e40c365bfbe1fecb333f7e08ab1c17a5234d9ed9a5c69914ab57d993";
+        # }
       ];
     })
     # Main Programs
