@@ -14,12 +14,16 @@ i = "move_line_up"
 o = "move_char_right"
 h = "move_next_word_end"
 H = "move_next_long_word_end"
-k = "search_next"
-K = "search_prev"
+# k = "search_next"
+# K = "search_prev"
 l = "insert_mode"
 L = "insert_at_line_start"
 E = "open_below"
 I = "open_above"
+
+
+N = "search_prev"
+O = "search_next"
 
 # C-s = ":w"
 # C-o = ":open ~/.config/helix/config.toml"

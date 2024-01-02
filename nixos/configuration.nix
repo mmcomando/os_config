@@ -77,6 +77,7 @@ in
       "video"
       "networkmanager" # So user can change network settings
       "docker"
+      "libvirtd" # Fox kvm?
     ];
     shell = pkgs.zsh; # Make zsh default shell
   };
@@ -203,6 +204,9 @@ in
     };
   };
 
+  # virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = true;
+
 
   environment.systemPackages = with pkgs; [
 
@@ -246,6 +250,12 @@ in
         # }
       ];
     })
+
+    # virt-manager
+    qemu_full
+    qemu_kvm
+    qemu-utils
+    OVMFFull
     # Main Programs
     alacritty # Terminal
     blender # 3d model editing
@@ -255,13 +265,13 @@ in
     btrfs-progs # Tools for btrfs file system
     gthumb # Images viewer
     hotspot # Program to analyze memory usage/leaks of given program
-    libreoffice # Documents editing
+    # libreoffice # Documents editing
     mpv # Player for audio, video
     pcmanfm # File manager
     pinta # Image draw/edit
     vlc # Player for audio, video
     vscode # vscode
-    teamspeak_client # Talking with people
+    # teamspeak_client # Talking with people
     # dolphin # File manager
     gimp # Images editing
     imagemagick # Command line image utilities
