@@ -13,7 +13,7 @@ set $left n
 set $down e
 set $up i
 set $right o
-set $screen_left HDMI-A-1
+# set $screen_left HDMI-A-1
 set $screen_right DP-1
 
 # Your preferred terminal emulator
@@ -228,12 +228,12 @@ bar {
 
     # Show available outputs: swaymsg -t get_outputs
     # 1920x1200 monitor on left
-    output $screen_left pos 0 110
+    #output $screen_left pos 0 110
     # 3440x1440 monitor on middle
-    output $screen_right pos 1920 0
+    # output $screen_right pos 1920 0
 
     output $screen_right background $my_wallpaper_uw fit
-    output $screen_left background $my_wallpaper_fhd center
+    #output $screen_left background $my_wallpaper_fhd center
 
 #
 # Startup programs:
@@ -253,10 +253,10 @@ bar {
     # resolution: (3440x1440)
     # area wacom: (155x95mm) >$ libinput list-devices
     # -> 1440 * 152 / 3440 = x -> x / 95 = y (use 'y')
-    input "1386:965:Wacom_Intuos_BT_S_Pen" {
-        map_to_output DP-1
-        map_from_region 0.0x0.0 1.0x0.669
-    }
+    # input "1386:965:Wacom_Intuos_BT_S_Pen" {
+    #     map_to_output DP-1
+    #     map_from_region 0.0x0.0 1.0x0.669
+    # }
 
     # Open file manager
     bindsym $mod+d exec pcmanfm
@@ -299,7 +299,7 @@ bar {
     exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
     bindsym $mod+z exec clipman pick -t wofi
 
-    workspace 10_tools output $screen_left
-    workspace 2 output $screen_left
+    # workspace 10_tools output $screen_left
+    # workspace 2 output $screen_left
     workspace 1 output $screen_right
 
